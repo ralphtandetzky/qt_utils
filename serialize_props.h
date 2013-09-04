@@ -1,3 +1,10 @@
+/// \file This header file provides functionality for serializing properties
+///     of @c QWidgets. This helps to set up the same parameters in the gui
+///     that were present when the gui last closed down.
+///
+/// \author Ralph Tandetzky
+/// \date 30 Aug 2013
+
 #pragma once
 
 #include <algorithm>
@@ -16,6 +23,12 @@ class QComboBox;
 
 namespace qu {
 
+/// \brief An interface which helps to serialize properties of \c QObjects.
+///
+/// The value being serialized should be written without any line-breaking
+/// characters, so that it is possible to skip reading a value by
+/// \c std::getline(stream,string), if a \c '\n' character is written after
+/// the serialized value.
 class PropertySerializer
 {
 public:
@@ -26,14 +39,39 @@ public:
     virtual std::unique_ptr<PropertySerializer> clone() const = 0;
 };
 
-
+/// \brief Factory function which creates a serializer for a \c QWidget.
+///
+/// The input value of the widget can be loaded and stored by the
+/// returned \c PropertySerializer.
 std::unique_ptr<PropertySerializer> createPropertySerializer( QCheckBox      * obj );
 std::unique_ptr<PropertySerializer> createPropertySerializer( QSpinBox       * obj );
 std::unique_ptr<PropertySerializer> createPropertySerializer( QDoubleSpinBox * obj );
 std::unique_ptr<PropertySerializer> createPropertySerializer( QComboBox      * obj );
 
+/// \brief Creates \c PropertySerializers for the elements of a container.
+///
+/// \param orig This must be an STL-compatible container providing the
+/// \c cbegin() and \c cend() member functions. Furthermore, the value type
+/// of the container must be a parameter type of one of the overloads of
+/// createPropertySerializer.
+///
+/// \param out This is where the created \c PropertySerializers will be
+/// written to. It must be an \c OutputIterator with the value type
+/// \c std::unique_ptr<PropertySerializer>.
+///
+/// \example The typical use of this function is the following inside the
+/// constructor of a class derived from \c QWidget.
+/// \code
+///     std::vector<std::unique_ptr<PropertySerializer>> serializers;
+///     qu::appendPropertySerializers(
+///         this->findChildren<QCheckBox*>(),
+///         std::back_inserter( m->serializers ) );
+///     qu::appendPropertySerializers(
+///         this->findChildren<QSpinBox*>(),
+///         std::back_inserter( m->serializers ) );
+/// \endcode
 template <typename Container, typename OutputIterator>
-void appendPropertySerializers(
+void createPropertySerializers(
         const Container & orig,
         OutputIterator out )
 {
@@ -47,6 +85,11 @@ void appendPropertySerializers(
     }
 }
 
+/// \brief Writes a container of \c PropertySerializer pointers to a stream.
+///
+/// The pointer type can be raw pointers, \c std::unique_ptrs,
+/// \c std::shared_ptrs or other smart pointers implementing the
+/// \c operator->() function.
 template <typename Container>
 void writeProperties( std::ostream & stream, const Container & container )
 {
