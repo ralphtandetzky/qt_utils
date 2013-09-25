@@ -10,12 +10,18 @@
 // forward declaration
 namespace cu { class UserParameter; }
 class QWidget;
+class QLabel;
 
 namespace qu
 {
 
 
 std::unique_ptr<QWidget> createControl(
+        const cu::UserParameter & param
+        , QWidget * parent
+        );
+
+std::unique_ptr<QLabel> createLabel(
         const cu::UserParameter & param
         , QWidget * parent
         );

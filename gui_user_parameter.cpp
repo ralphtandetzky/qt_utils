@@ -6,6 +6,7 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QLabel>
 #include <memory>
 
 using namespace cu;
@@ -78,6 +79,20 @@ std::unique_ptr<QWidget> createControl(
     CreateControlVisitor v( parent );
     param.accept( v );
     return v.getResult();
+}
+
+
+std::unique_ptr<QLabel> createLabel(
+        const cu::UserParameter & param
+        , QWidget * parent
+        )
+{
+    auto result = std::make_unique<QLabel>( parent );
+    result->setText( QString::fromStdString(
+        param.getFullName()) );
+    result->setToolTip( QString::fromStdString(
+        param.getDescription()) );
+    return result;
 }
 
 
