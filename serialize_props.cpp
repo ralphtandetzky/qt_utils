@@ -6,9 +6,11 @@
 #include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QSpinBox>
+#include <QLineEdit>
 
-#include <ostream>
+#include <cassert>
 #include <istream>
+#include <ostream>
 
 namespace qu {
 
@@ -108,6 +110,85 @@ std::unique_ptr<PropertySerializer> createPropertySerializer( QComboBox * obj )
         []( std::ostream & stream, const QComboBox * obj )
     {
         stream << obj->currentIndex();
+    } );
+}
+
+static std::string unescapeAllWhiteSpaces( const std::string & s )
+{
+    auto result = std::string();
+    auto it = begin(s);
+    while ( it != s.end() )
+    {
+        auto c = *it;
+        ++it;
+        if ( c!='\\' )
+        {
+            result.push_back(c);
+            continue;
+        }
+        c = *it;
+        ++it;
+        switch ( c )
+        {
+        case 't' : result.push_back( '\t' ); break;
+        case 'n' : result.push_back( '\n' ); break;
+        case 'v' : result.push_back( '\v' ); break;
+        case 'f' : result.push_back( '\f' ); break;
+        case 'r' : result.push_back( '\r' ); break;
+        case '\\': result.push_back( '\\' ); break;
+        case 's' : result.push_back( ' '  ); break;
+        default:
+            assert(!"Unknown whitespace character in string.");
+            result.push_back(c);
+            break;
+        }
+    }
+    return result;
+}
+
+static std::string escapeAllWhiteSpaces( const std::string & s )
+{
+    auto result = std::string();
+    for ( auto c : s )
+    {
+        if ( !isspace(c) && c!='\\' )
+        {
+            result.push_back(c);
+            continue;
+        }
+        result.push_back('\\');
+        switch ( c )
+        {
+        case '\t': result.push_back( 't' ); break;
+        case '\n': result.push_back( 'n' ); break;
+        case '\v': result.push_back( 'v' ); break;
+        case '\f': result.push_back( 'f' ); break;
+        case '\r': result.push_back( 'r' ); break;
+        case '\\': result.push_back( '\\'); break;
+        case ' ' : result.push_back( 's' ); break;
+        default:
+            assert(!"Unknown whitespace character in string.");
+            result.push_back(c);
+            break;
+        }
+    }
+    return result;
+}
+
+std::unique_ptr<PropertySerializer> createPropertySerializer( QLineEdit * obj )
+{
+    return createPropertySerializer( obj,
+        []( std::istream & stream, QLineEdit * obj )
+    {
+        std::string s;
+        stream >> s;
+        obj->setText( QString::fromStdString(
+            unescapeAllWhiteSpaces(s)) );
+    },
+        []( std::ostream & stream, const QLineEdit * obj )
+    {
+        stream << escapeAllWhiteSpaces(
+            obj->text().toStdString() );
     } );
 }
 

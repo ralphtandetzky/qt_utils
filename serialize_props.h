@@ -20,6 +20,7 @@ class QCheckBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
+class QLineEdit;
 
 namespace qu {
 
@@ -47,6 +48,7 @@ std::unique_ptr<PropertySerializer> createPropertySerializer( QCheckBox      * o
 std::unique_ptr<PropertySerializer> createPropertySerializer( QSpinBox       * obj );
 std::unique_ptr<PropertySerializer> createPropertySerializer( QDoubleSpinBox * obj );
 std::unique_ptr<PropertySerializer> createPropertySerializer( QComboBox      * obj );
+std::unique_ptr<PropertySerializer> createPropertySerializer( QLineEdit      * obj );
 
 /// \brief Creates \c PropertySerializers for the elements of a container.
 ///
