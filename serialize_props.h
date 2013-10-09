@@ -92,12 +92,25 @@ void createPropertySerializers(
 /// The pointer type can be raw pointers, \c std::unique_ptrs,
 /// \c std::shared_ptrs or other smart pointers implementing the
 /// \c operator->() function.
+///
+/// @note All objects whose object name is @c "qt_spinbox_lineedit" will
+/// not be serialized, since Qt uses this name for @c QLineEdits that
+/// are used internally to build @c QSpinBoxes and @c QDoubleSpinBoxes.
+/// The widgets with this name are skipped on purpose, since these
+/// @c QSpinBoxes and @c QDoubleSpinBoxes can easily be serialized
+/// and it is normally not the users intention to serialize the internal
+/// @c QLineEdits of these widgets. If you still want to serialize these
+/// widgets consider to rename them.
 template <typename Container>
 void writeProperties( std::ostream & stream, const Container & container )
 {
     for ( const auto & p : container )
     {
-        stream << p->getObject()->objectName().toStdString() << ' ';
+        auto name = p->getObject()->objectName().toStdString();
+        // skip QLineEdits that are used internally by Qt for QSpinBoxes
+        if ( name == "qt_spinbox_lineedit" )
+            continue;
+        stream << name << ' ';
         p->write( stream );
         stream << std::endl;
     }
