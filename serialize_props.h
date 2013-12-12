@@ -77,8 +77,8 @@ void createPropertySerializers(
         const Container & orig,
         OutputIterator out )
 {
-    auto first = orig.cbegin();
-    const auto last = orig.cend();
+    auto first = orig.begin();
+    const auto last = orig.end();
     while ( first != last )
     {
         *out = createPropertySerializer( *first );
