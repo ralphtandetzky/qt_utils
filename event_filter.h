@@ -10,11 +10,15 @@
 #include <functional>
 #include <memory>
 
+#include "cpp_utils/std_make_unique.h"
+
 
 class QEvent;
 
 namespace qu
 {
+
+class GenericEventFilter;
 
 /// @brief Creates an event filter with @c f as filter function.
 ///
@@ -55,8 +59,9 @@ class GenericEventFilter
 {
     Q_OBJECT
 public:
+    template <typename F>
     GenericEventFilter( F && f )
-        : f(f)
+        : f(std::forward<F>(f))
     {
     }
 
