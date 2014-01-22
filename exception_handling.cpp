@@ -43,7 +43,7 @@ void handleException()
         {
             int i=0;
             for ( const auto & what : whatChain )
-                reasons += "\t" + std::to_string(i)
+                reasons += "\t" + std::to_string(++i)
                         + ". " + what + '\n';
             reasons.pop_back();
         }
