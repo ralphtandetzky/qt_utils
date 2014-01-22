@@ -116,6 +116,8 @@ std::unique_ptr<PropertySerializer> createPropertySerializer( QComboBox * obj )
 static std::string unescapeAllWhiteSpaces( const std::string & s )
 {
     auto result = std::string();
+    if ( s == "\\0" )
+        return result;
     auto it = begin(s);
     while ( it != s.end() )
     {
@@ -148,6 +150,8 @@ static std::string unescapeAllWhiteSpaces( const std::string & s )
 
 static std::string escapeAllWhiteSpaces( const std::string & s )
 {
+    if ( s.empty() )
+        return "\\0";
     auto result = std::string();
     for ( auto c : s )
     {
