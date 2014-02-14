@@ -1,5 +1,6 @@
 #include "qt_utils/exception_handling.h"
 
+#include "qt_utils/invoke_in_thread.h"
 #include "cpp_utils/exception_handling.h"
 
 #include <exception>
@@ -49,10 +50,13 @@ void handleException()
         }
     }
 
-    QMessageBox msgBox;
-    msgBox.setText( QString::fromStdString( mainMessage ) );
-    msgBox.setInformativeText( QString::fromStdString( reasons ) );
-    msgBox.exec();
+    invokeInGuiThread( [=]()
+    {
+        QMessageBox msgBox;
+        msgBox.setText( QString::fromStdString( mainMessage ) );
+        msgBox.setInformativeText( QString::fromStdString( reasons ) );
+        msgBox.exec();
+    } );
 }
 
 }
