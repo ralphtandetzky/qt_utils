@@ -214,5 +214,20 @@ std::unique_ptr<PropertySerializer> createPropertySerializer( QPlainTextEdit *ob
     } );
 }
 
+std::unique_ptr<PropertySerializer> createPropertySerializer( QTabWidget *obj )
+{
+    return createPropertySerializer( obj,
+        []( std::istream & stream, QTabWidget * obj )
+    {
+        int index;
+        stream >> index;
+        if ( index < obj->count() )
+            obj->setCurrentIndex( index );
+    },
+        []( std::ostream & stream, const QTabWidget * obj )
+    {
+        stream << obj->currentIndex();
+    } );
+}
 
 } // namespace qu
