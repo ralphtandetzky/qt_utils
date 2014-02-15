@@ -7,6 +7,7 @@
 #include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QLineEdit>
+#include <QPlainTextEdit>
 
 #include <cassert>
 #include <istream>
@@ -195,5 +196,23 @@ std::unique_ptr<PropertySerializer> createPropertySerializer( QLineEdit * obj )
             obj->text().toStdString() );
     } );
 }
+
+std::unique_ptr<PropertySerializer> createPropertySerializer( QPlainTextEdit *obj )
+{
+    return createPropertySerializer( obj,
+        []( std::istream & stream, QPlainTextEdit * obj )
+    {
+        std::string s;
+        stream >> s;
+        obj->setPlainText( QString::fromStdString(
+            unescapeAllWhiteSpaces(s)) );
+    },
+        []( std::ostream & stream, const QPlainTextEdit * obj )
+    {
+        stream << escapeAllWhiteSpaces(
+            obj->toPlainText().toStdString() );
+    } );
+}
+
 
 } // namespace qu
