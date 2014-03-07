@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "qt_utils/exception_handling.h"
+#include "../qt_utils/exception_handling.h"
 #include <QApplication>
 
 namespace qu {
