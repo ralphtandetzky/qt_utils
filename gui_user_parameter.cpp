@@ -33,7 +33,7 @@ namespace {
         virtual void visit( const RealUserParameter & param )
         {
             auto w = std::make_unique<QDoubleSpinBox>(parent);
-            SCOPE_SUCCESS { result = std::move(w); };
+            CU_SCOPE_SUCCESS { result = std::move(w); };
             w->setMinimum( param.getLowerBound() );
             w->setMaximum( param.getUpperBound() );
             w->setSingleStep( param.getStepSize() );
@@ -47,7 +47,7 @@ namespace {
         virtual void visit( const IntUserParameter & param )
         {
             auto w = std::make_unique<QSpinBox>(parent);
-            SCOPE_SUCCESS { result = std::move(w); };
+            CU_SCOPE_SUCCESS { result = std::move(w); };
             w->setMinimum( param.getLowerBound() );
             w->setMaximum( param.getUpperBound() );
             w->setSingleStep( param.getStepSize() );
@@ -59,7 +59,7 @@ namespace {
         virtual void visit( const BoolUserParameter & param )
         {
             auto w = std::make_unique<QCheckBox>(parent);
-            SCOPE_SUCCESS { result = std::move(w); };
+            CU_SCOPE_SUCCESS { result = std::move(w); };
             w->setChecked( param.getValue() );
             w->setToolTip( QString::fromStdString(
                                param.getDescription() ) );
