@@ -5,8 +5,6 @@
 #include "../cpp_utils/progress_interface.h"
 #include "../cpp_utils/std_make_unique.h"
 
-#include "invoke_in_thread.h"
-
 #include <condition_variable>
 
 static const int maxProgressValue = 10000;
@@ -18,13 +16,13 @@ struct ProgressWidget::Impl final : cu::ProgressInterface
     ////////////////////////////////////////////////
     // Implementation of @c cu::ProgressInterface //
     ////////////////////////////////////////////////
-    virtual void setProgress( double progress )
+    virtual void setProgress( double progress ) override
     {
         int val = maxProgressValue * progress;
         QMetaObject::invokeMethod( ui.progressBar, "setValue", Q_ARG(int,val) );
     }
 
-    virtual bool shallAbort() const
+    virtual bool shallAbort() const override
     {
         return shared.withUniqueLock( []( const Shared & shared
             , std::unique_lock<std::mutex> lock )
@@ -80,9 +78,9 @@ void ProgressWidget::setCancelButtonVisible( bool val )
     m->ui.cancelButton->setVisible( val );
 }
 
-cu::ProgressInterface * ProgressWidget::getProgressInterface() const
+cu::ProgressInterface & ProgressWidget::getProgressInterface() const
 {
-    return m.get();
+    return *m;
 }
 
 std::function<void()> ProgressWidget::getAtExitFunction() const
@@ -91,6 +89,11 @@ std::function<void()> ProgressWidget::getAtExitFunction() const
 }
 
 void ProgressWidget::setAtExitFunction( std::function<void()> f )
+{
+    swapAtExitFunction( f );
+}
+
+void ProgressWidget::swapAtExitFunction( std::function<void()> & f ) noexcept
 {
     m->atExitFunc.swap(f);
 }

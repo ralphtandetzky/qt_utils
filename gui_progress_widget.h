@@ -23,9 +23,10 @@ public:
     void setOperationName( const QString & name );
     void setPauseButtonVisible( bool val = true );
     void setCancelButtonVisible( bool val = true );
-    cu::ProgressInterface * getProgressInterface() const;
+    cu::ProgressInterface & getProgressInterface() const;
     std::function<void()> getAtExitFunction() const;
     void setAtExitFunction( std::function<void()> f );
+    void swapAtExitFunction( std::function<void()> & f ) noexcept;
 
 private slots:
     void pause( bool shallPause );

@@ -16,13 +16,15 @@ HEADERS += event_filter.h \
            invoke_in_thread.h \
            loop_thread.h \
            serialize_props.h \
-    gui_progress_widget.h
+    gui_progress_widget.h \
+    gui_progress_manager.h
 
 SOURCES += exception_handling.cpp \
            gui_property_sheet.cpp \
            gui_user_parameter.cpp \
            serialize_props.cpp \
-    gui_progress_widget.cpp
+    gui_progress_widget.cpp \
+    gui_progress_manager.cpp
 
 LIBS += -L../cpp_utils -lcpp_utils \
 
