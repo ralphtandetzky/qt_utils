@@ -36,9 +36,10 @@ std::unique_ptr<QObject> makeEventFilter( F && f )
 /// @brief Creates and installs an event filter.
 /// 
 /// The function creates an event filter with @c makeEventFilter and then
-/// installs it on the given object @c obj. The event filter will have 
-/// @c obj as parent, if successful. The strong exception guarantee is 
-/// provided. 
+/// installs it on the given object @c obj. The functor @f must have the
+/// signature @c bool(QObject*,QEvent*) just as the function
+/// @c QObject::eventFilter().The event filter will have @c obj as
+/// parent, if successful. The strong exception guarantee is provided.
 template <typename F>
 void installEventFilter( QObject * obj, F && f )
 {
