@@ -20,66 +20,42 @@ class ProgressWidgetProgress
 {
 public:
     ProgressWidgetProgress( ProgressWidget * progressWidget )
-        : shared()
+        : widget(std::make_shared<cu::Monitor<ProgressWidget*>>(progressWidget))
     {
         // Special care has to be taken in the case that the @c progressWidget
         // is destroyed before @c this. In that case the widget's
-        // at-exit-function shall set the internal @c progressWidget pointer
-        // to null. If @c this is destroyed first, then the destructor will
-        // restore the old at-exit-function, so the at-exit function does not
-        // access a destroyed object.
-        shared( [=]( Shared & d )
-        {
-            d.progressWidget = progressWidget;
-            const auto tmpFunc = d.progressWidget->getAtExitFunction();
-            d.oldAtExitFunc = [=]{
-                this->shared( []( Shared & d )
-                {
-                    d.progressWidget = nullptr;
-                });
-                tmpFunc();
-            };
-            d.progressWidget->swapAtExitFunction( d.oldAtExitFunc );
-        });
-    }
-
-    virtual ~ProgressWidgetProgress()
-    {
-        // See comments in the destructor for an explanation.
-        shared( [=]( Shared & d )
-        {
-            if ( d.progressWidget )
-                d.progressWidget->swapAtExitFunction( d.oldAtExitFunc );
-        });
+        // at-exit-function shall set the internal @c ProgressWidget pointer
+        // to null.
+        const auto sharedWidget = widget;
+        const auto f = progressWidget->getAtExitFunction();
+        progressWidget->setAtExitFunction( [sharedWidget,f]() mutable {
+            (*sharedWidget)( []( ProgressWidget *& ptr ){ ptr = nullptr; } );
+            f();
+        } );
     }
 
     virtual void setProgress( double progress ) override
     {
         // no op, if the associated ProgressWidget has been destroyed.
-        shared( [=]( Shared & d ){
-            if ( d.progressWidget )
-                d.progressWidget->getProgressInterface().setProgress( progress );
+        (*widget)( [=]( ProgressWidget * const ptr ) {
+            if ( ptr ) // widget still lives?
+                ptr->getProgressInterface().setProgress( progress );
         } );
     }
 
     virtual bool shallAbort() const override
     {
         // returns true, if the associated ProgressWidget has been destroyed.
-        return shared( []( const Shared & d ){
-            return d.progressWidget ?
-                    d.progressWidget->getProgressInterface().shallAbort() :
-                    true;
+        return (*widget)( [=]( ProgressWidget * const ptr ) -> bool {
+            if ( ptr ) // widget still lives?
+                return ptr->getProgressInterface().shallAbort();
+            return true;
         } );
+
     }
 
 private:
-    struct Shared
-    {
-        ProgressWidget * progressWidget = nullptr;
-        std::function<void()> oldAtExitFunc;
-    };
-
-    cu::Monitor<Shared> shared;
+    std::shared_ptr<cu::Monitor<ProgressWidget *>> widget;
 };
 
 } // unnamed namespace
