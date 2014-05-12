@@ -117,7 +117,7 @@ auto invokeInThreadSync( QThread * thread, F && f )
 /// Like @c invokeInThreadSync(), but passing a pointer to the Qt gui thread.
 template <typename F>
 auto invokeInGuiThreadSync( F && f )
-    -> std::future<decltype(f())>
+    -> decltype(f())
 {
     return invokeInGuiThread( std::forward<F>(f),
                               Qt::AutoConnection ).get();
