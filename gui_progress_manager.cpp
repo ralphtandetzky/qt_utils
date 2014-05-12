@@ -30,7 +30,8 @@ public:
         const auto f = progressWidget->getAtExitFunction();
         progressWidget->setAtExitFunction( [sharedWidget,f]() mutable {
             (*sharedWidget)( []( ProgressWidget *& ptr ){ ptr = nullptr; } );
-            f();
+            if ( f )
+                f();
         } );
     }
 
