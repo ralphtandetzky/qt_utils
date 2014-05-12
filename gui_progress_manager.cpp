@@ -1,6 +1,7 @@
 #include "gui_progress_manager.h"
 
 #include "gui_progress_widget.h"
+#include "invoke_in_thread.h"
 
 #include "../cpp_utils/locking.h"
 #include "../cpp_utils/progress.h"
@@ -67,17 +68,20 @@ struct ProgressWidgetContainer::Impl : ProgressManagerInterface
         : containerWidget(containerWidget)
     {
         auto layout = std::make_unique<QVBoxLayout>( containerWidget );
+        layout->addStretch(1);
         containerWidget->setLayout( layout.release() );
     }
 
     virtual std::unique_ptr<cu::ProgressInterface> createProgress(
             const QString & operationName ) override
     {
-        auto progressWidget = std::make_unique<ProgressWidget>();
-        progressWidget->setOperationName( operationName );
-        auto progress = std::make_unique<ProgressWidgetProgress>( progressWidget.get() );
-        containerWidget->layout()->addWidget( progressWidget.release() );
-        return std::move(progress);
+        return invokeInGuiThreadSync( [&]{
+            auto progressWidget = std::make_unique<ProgressWidget>();
+            progressWidget->setOperationName( operationName );
+            auto progress = std::make_unique<ProgressWidgetProgress>( progressWidget.get() );
+            containerWidget->layout()->addWidget( progressWidget.release() );
+            return std::move(progress);
+        } );
     }
 
     QWidget * containerWidget;
