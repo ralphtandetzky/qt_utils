@@ -55,6 +55,7 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
     m( std::make_unique<Impl>() )
 {
     m->ui.setupUi(this);
+    m->ui.progressBar->setMaximum( maxProgressValue );
 }
 
 ProgressWidget::~ProgressWidget()

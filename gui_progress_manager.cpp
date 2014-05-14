@@ -31,8 +31,22 @@ public:
         const auto f = progressWidget->getAtExitFunction();
         progressWidget->setAtExitFunction( [sharedWidget,f]() mutable {
             (*sharedWidget)( []( ProgressWidget *& ptr ){ ptr = nullptr; } );
-            if ( f )
-                f();
+        } );
+    }
+
+    ~ProgressWidgetProgress()
+    {
+        const auto movedWidget = std::move(widget);
+        qu::invokeInGuiThread( [movedWidget]()
+        {
+            (*movedWidget)( [](ProgressWidget *& ptr )
+            {
+                if ( !ptr )
+                    return;
+                ptr->setAtExitFunction( {} );
+                delete ptr;
+                ptr = nullptr;
+            });
         } );
     }
 
@@ -68,6 +82,7 @@ struct ProgressWidgetContainer::Impl : ProgressManagerInterface
         : containerWidget(containerWidget)
     {
         auto layout = std::make_unique<QVBoxLayout>( containerWidget );
+        layout->setContentsMargins( 0,0,0,0 );
         layout->addStretch(1);
         containerWidget->setLayout( layout.release() );
     }
