@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>25</height>
+    <height>32</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,11 +20,39 @@
    <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <property name="margin">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
     <widget class="QLabel" name="operationNameLabel"/>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>6</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <widget class="QProgressBar" name="progressBar">
@@ -41,17 +69,46 @@
    </item>
    <item>
     <widget class="QToolButton" name="pauseButton">
+     <property name="icon">
+      <iconset resource="qt_utils.qrc">
+       <normaloff>:/new/icons/icon_run_24x24.png</normaloff>:/new/icons/icon_run_24x24.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
      <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="cancelButton"/>
+    <widget class="QToolButton" name="cancelButton">
+     <property name="icon">
+      <iconset resource="qt_utils.qrc">
+       <normaloff>:/new/icons/icon_cancel_24x24.png</normaloff>:/new/icons/icon_cancel_24x24.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="qt_utils.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pauseButton</sender>

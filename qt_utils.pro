@@ -31,3 +31,5 @@ LIBS += -L../cpp_utils -lcpp_utils \
 FORMS += \
     gui_progress_widget.ui
 
+RESOURCES += \
+    qt_utils.qrc
