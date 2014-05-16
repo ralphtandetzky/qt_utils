@@ -56,6 +56,7 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
 {
     m->ui.setupUi(this);
     m->ui.progressBar->setMaximum( maxProgressValue );
+    setOperationName({});
 }
 
 ProgressWidget::~ProgressWidget()
@@ -66,7 +67,8 @@ ProgressWidget::~ProgressWidget()
 
 void ProgressWidget::setOperationName( const QString & name )
 {
-    m->ui.operationNameLabel->setText( name );
+    m->ui.progressBar->setFormat(
+        name.isEmpty() ? "%p %" : name + "  -  %p %" );
 }
 
 void ProgressWidget::setPauseButtonVisible( bool val )

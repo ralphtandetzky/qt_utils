@@ -36,25 +36,6 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="operationNameLabel"/>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>6</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
     <widget class="QProgressBar" name="progressBar">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -71,7 +52,8 @@
     <widget class="QToolButton" name="pauseButton">
      <property name="icon">
       <iconset resource="qt_utils.qrc">
-       <normaloff>:/new/icons/icon_run_24x24.png</normaloff>:/new/icons/icon_run_24x24.png</iconset>
+       <normaloff>:/new/icons/icon_pause_24x24.png</normaloff>
+       <normalon>:/new/icons/icon_run_24x24.png</normalon>:/new/icons/icon_pause_24x24.png</iconset>
      </property>
      <property name="iconSize">
       <size>

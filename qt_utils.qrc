@@ -7,5 +7,6 @@
         <file>icon_cancel_24x24.png</file>
         <file>icon_next_imf_24x24.png</file>
         <file>icon_quit_app_24x24.png</file>
+        <file>icon_pause_24x24.png</file>
     </qresource>
 </RCC>
