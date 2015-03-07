@@ -1,6 +1,6 @@
-#include "qt_utils/serialize_props.h"
+#include "../serialize_props.h"
 
-#include "cpp_utils/std_make_unique.h"
+#include "../cpp_utils/std_make_unique.h"
 
 #include <QCheckBox>
 #include <QComboBox>

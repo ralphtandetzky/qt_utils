@@ -1,7 +1,7 @@
 #include "gui_user_parameter.h"
-#include "cpp_utils/user_parameter.h"
-#include "cpp_utils/std_make_unique.h"
-#include "cpp_utils/scope_guard.h"
+#include "../cpp_utils/user_parameter.h"
+#include "../cpp_utils/std_make_unique.h"
+#include "../cpp_utils/scope_guard.h"
 
 #include <QDoubleSpinBox>
 #include <QSpinBox>

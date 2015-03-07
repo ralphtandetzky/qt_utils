@@ -1,7 +1,7 @@
-#include "qt_utils/exception_handling.h"
+#include "exception_handling.h"
 
-#include "qt_utils/invoke_in_thread.h"
-#include "cpp_utils/exception_handling.h"
+#include "invoke_in_thread.h"
+#include "../cpp_utils/exception_handling.h"
 
 #include <exception>
 #include <QMessageBox>

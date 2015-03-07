@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <cpp_utils/std_make_unique.h>
+#include <../cpp_utils/std_make_unique.h>
 
 #include <QApplication>
 #include <QObject>
