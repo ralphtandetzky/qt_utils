@@ -1,4 +1,4 @@
-#include "../serialize_props.h"
+#include "serialize_props.h"
 
 #include "../cpp_utils/std_make_unique.h"
 
