@@ -17,7 +17,8 @@ HEADERS += event_filter.h \
            loop_thread.h \
            serialize_props.h \
     gui_progress_widget.h \
-    gui_progress_manager.h
+    gui_progress_manager.h \
+    event_handling_graphics_item.h
 
 SOURCES += exception_handling.cpp \
            gui_property_sheet.cpp \
